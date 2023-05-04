@@ -57,7 +57,7 @@ const getFunFact = async (req, res) => {
         return res.status(400).json({ "message": `No Fun Facts found for ${state.state}` });
     }
     const randomIndex = Math.floor(Math.random() * state.funfacts.length);
-    res.json(state.funfacts[randomIndex]);
+    res.json({"funfact": state.funfacts[randomIndex]});
 }
 
 const getCapital = async (req, res) => {
@@ -73,7 +73,7 @@ const getCapital = async (req, res) => {
     if (!state.hasOwnProperty("capital_city")){
         return res.status(400).json({ "message": `Invalid state abbreviation parameter` });
     }
-    res.json(state.capital_city);
+    res.json({"state": state.state, "capital": state.capital_city});
 }
 
 const getNickname = async (req, res) => {
@@ -90,7 +90,7 @@ const getNickname = async (req, res) => {
         return res.status(400).json({ "message": `Invalid state abbreviation parameter` });
     }
 
-    res.json(state.nickname);
+    res.json({"state": state.state, "nickname": state.nickname});
 }
 
 const getPopulation = async (req, res) => {
@@ -107,7 +107,7 @@ const getPopulation = async (req, res) => {
         return res.status(400).json({ "message": `Invalid state abbreviation parameter` });
     }
     
-    res.json(state.population);
+    res.json({"state": state.state, "population": state.population});
 }
 
 const getAdmission = async (req, res) => {
@@ -124,7 +124,7 @@ const getAdmission = async (req, res) => {
         return res.status(400).json({ "message": `Invalid state abbreviation parameter` });
     }
     
-    res.json(state.admission_date);
+    res.json({"state": state.state, "admitted": state.admission_date});
 }
 
 

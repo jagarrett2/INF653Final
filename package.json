@@ -4,7 +4,7 @@
   "description": "Final Project for Backend Programming Class",
   "main": "index.js",
   "engines": {
-    "node": "19.8.1"
+    "node": "16.6.1"
   },
   "scripts": {
     "start": "node server.js",
