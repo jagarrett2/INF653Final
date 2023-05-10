@@ -189,7 +189,7 @@ const updateState = async (req, res) => {
 const patchFunFact = async (req, res) => {
     if (!req?.params?.state) return res.status(400).json({ 'message': 'State ID required.' });
     if (!req?.body?.index) return res.status(400).json({ 'message': 'State fun fact index value required' });
-    if (!req?.body?.funfact) return res.status(400).json({ 'message': 'State fun facts value required' });
+    if (!req?.body?.funfact || (typeof req.body.funfact) !== 'string') return res.status(400).json({ 'message': 'State fun fact value required' });
     const stateParam = req.params.state.toLowerCase();
     const states = await data.states;
     const funfact = req.body.funfact;
@@ -202,7 +202,7 @@ const patchFunFact = async (req, res) => {
     try {
         if(state.hasOwnProperty("funfacts")){
             if(index > state.funfacts.length){
-                res.status(400).json({"message": "No Fun Fact found at that index for " + state.state});
+                res.status(400).json({"message": "No Fun Facts found for " + state.state});
             }
             else{
                 state.funfacts[index - 1] = funfact; 
@@ -233,7 +233,7 @@ const deleteFunFact = async (req, res) => {
     try {
         if(state.hasOwnProperty("funfacts")){
             if(index > state.funfacts.length){
-                res.status(400).json({"message": "No Fun Fact found at that index for " + state.state});
+                res.status(400).json({"message": "No Fun Facts found for " + state.state});
             }
             else{
                 state.funfacts.splice(index - 1, 1); 
