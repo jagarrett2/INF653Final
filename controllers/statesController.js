@@ -202,7 +202,7 @@ const patchFunFact = async (req, res) => {
     try {
         if(state.hasOwnProperty("funfacts")){
             if(index > state.funfacts.length){
-                res.status(400).json({"message": "No Fun Facts found for " + state.state});
+                res.status(400).json({"message": "No Fun Fact found at that index for " + state.state});
             }
             else{
                 state.funfacts[index - 1] = funfact; 
@@ -210,7 +210,7 @@ const patchFunFact = async (req, res) => {
             }
         }
         else{
-            res.status(400).json({"message": "No fun facts to patch"});
+            res.status(400).json({"message": "No Fun Facts found for " + state.state});
         }
     } catch (err) {
         res.json(err);
@@ -220,10 +220,8 @@ const patchFunFact = async (req, res) => {
 const deleteFunFact = async (req, res) => {
     if (!req?.params?.state) return res.status(400).json({ 'message': 'State ID required.' });
     if (!req?.body?.index || req.body.index == 0) return res.status(400).json({ 'message': 'State fun fact index value required' });
-    if (!req?.body?.funfact) return res.status(400).json({ 'message': 'State fun facts value required' });
     const stateParam = req.params.state.toLowerCase();
     const states = await data.states;
-    const funfact = req.body.funfact;
     const index = req.body.index;
     const state = states.filter(item => item.code.toLowerCase() == stateParam)[0];
 
@@ -233,7 +231,7 @@ const deleteFunFact = async (req, res) => {
     try {
         if(state.hasOwnProperty("funfacts")){
             if(index > state.funfacts.length){
-                res.status(400).json({"message": "No Fun Facts found for " + state.state});
+                res.status(400).json({"message": "No Fun Fact found at that index for " + state.state});
             }
             else{
                 state.funfacts.splice(index - 1, 1); 
@@ -241,7 +239,7 @@ const deleteFunFact = async (req, res) => {
             }
         }
         else{
-            res.status(400).json({"message": "No fun facts to patch"});
+            res.status(400).json({"message": "No Fun Facts found for " + state.state});
         }
     } catch (err) {
         res.json(err);
