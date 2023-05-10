@@ -107,7 +107,7 @@ const getPopulation = async (req, res) => {
         return res.status(400).json({ "message": `Invalid state abbreviation parameter` });
     }
     
-    res.json({"state": state.state, "population": state.population});
+    res.json({"state": state.state, "population": state.population.toLocaleString()});
 }
 
 const getAdmission = async (req, res) => {
@@ -140,6 +140,32 @@ const createNewState = async (req, res) => {
         });
 
         res.status(201).json(result);
+    } catch (err) {
+        res.json(err);
+    }
+}
+
+const postFunFact = async (req, res) => {
+    if (!req?.params?.state) return res.status(400).json({ 'message': 'State ID required.' });
+    if (!req?.body?.funfacts) return res.status(400).json({ 'message': 'State fun facts value required' });
+
+    const stateParam = req.params.state.toLowerCase();
+    const states = await data.states;
+    const funfacts = req.body.funfacts;
+    const state = states.filter(item => item.code.toLowerCase() == stateParam)[0];
+
+    if(!Array.isArray(funfacts)) return res.status(400).json({ "message": "State fun facts value must be an array" })
+    if (!state) return res.status(400).json({ "message": `Invalid state abbreviation parameter` });
+
+
+    try {
+        if(state.hasOwnProperty("funfacts")){
+            state.funfacts = [...state.funfacts, ...funfacts];
+        }
+        else{
+            state.funfacts = funfacts;
+        }
+        res.status(201).json({'stateCode': state.code, 'funfacts': state.funfacts});
     } catch (err) {
         res.json(err);
     }
@@ -182,5 +208,6 @@ module.exports = {
     getCapital,
     getNickname,
     getPopulation,
-    getAdmission
+    getAdmission,
+    postFunFact
 }

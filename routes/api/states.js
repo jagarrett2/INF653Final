@@ -12,7 +12,9 @@ router.route('/:state')
     .get(statesController.getState);
 
 router.route("/:state/funfact")
-    .get(statesController.getFunFact);
+    .get(statesController.getFunFact)
+    .post(statesController.postFunFact);
+    
 router.route("/:state/capital")
     .get(statesController.getCapital);
 router.route("/:state/nickname")
@@ -21,7 +23,6 @@ router.route("/:state/population")
     .get(statesController.getPopulation);
 router.route("/:state/admission")
     .get(statesController.getAdmission);
-
 
 module.exports = router;
 
