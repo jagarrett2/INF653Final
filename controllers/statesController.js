@@ -165,7 +165,7 @@ const postFunFact = async (req, res) => {
         else{
             state.funfacts = funfacts;
         }
-        res.status(201).json({'stateCode': state.code, 'funfacts': state.funfacts});
+        res.status(201).json({'state': state.state, 'stateCode': state.code, 'slug': state.slug, 'funfacts': state.funfacts});
     } catch (err) {
         res.json(err);
     }
@@ -184,6 +184,68 @@ const updateState = async (req, res) => {
     if (req.body?.funfacts) state.funfacts = req.body.funfacts;
     const result = await state.save();
     res.json(result);
+}
+
+const patchFunFact = async (req, res) => {
+    if (!req?.params?.state) return res.status(400).json({ 'message': 'State ID required.' });
+    if (!req?.body?.index) return res.status(400).json({ 'message': 'State fun fact index value required' });
+    if (!req?.body?.funfact) return res.status(400).json({ 'message': 'State fun facts value required' });
+    const stateParam = req.params.state.toLowerCase();
+    const states = await data.states;
+    const funfact = req.body.funfact;
+    const index = req.body.index;
+    const state = states.filter(item => item.code.toLowerCase() == stateParam)[0];
+
+    if (!state) return res.status(400).json({ "message": `Invalid state abbreviation parameter` });
+
+
+    try {
+        if(state.hasOwnProperty("funfacts")){
+            if(index > state.funfacts.length){
+                res.status(400).json({"message": "No Fun Fact found at that index for " + state.state});
+            }
+            else{
+                state.funfacts[index - 1] = funfact; 
+                res.status(201).json({'state': state.state, 'stateCode': state.code, 'slug': state.slug, 'funfacts': state.funfacts});
+            }
+        }
+        else{
+            res.status(400).json({"message": "No fun facts to patch"});
+        }
+    } catch (err) {
+        res.json(err);
+    }
+}
+
+const deleteFunFact = async (req, res) => {
+    if (!req?.params?.state) return res.status(400).json({ 'message': 'State ID required.' });
+    if (!req?.body?.index || req.body.index == 0) return res.status(400).json({ 'message': 'State fun fact index value required' });
+    if (!req?.body?.funfact) return res.status(400).json({ 'message': 'State fun facts value required' });
+    const stateParam = req.params.state.toLowerCase();
+    const states = await data.states;
+    const funfact = req.body.funfact;
+    const index = req.body.index;
+    const state = states.filter(item => item.code.toLowerCase() == stateParam)[0];
+
+    if (!state) return res.status(400).json({ "message": `Invalid state abbreviation parameter` });
+
+
+    try {
+        if(state.hasOwnProperty("funfacts")){
+            if(index > state.funfacts.length){
+                res.status(400).json({"message": "No Fun Fact found at that index for " + state.state});
+            }
+            else{
+                state.funfacts.splice(index - 1, 1); 
+                res.status(201).json({'state': state.state, 'stateCode': state.code, 'slug': state.slug, 'funfacts': state.funfacts});
+            }
+        }
+        else{
+            res.status(400).json({"message": "No fun facts to patch"});
+        }
+    } catch (err) {
+        res.json(err);
+    }
 }
 
 const deleteState = async (req, res) => {
@@ -209,5 +271,7 @@ module.exports = {
     getNickname,
     getPopulation,
     getAdmission,
-    postFunFact
+    postFunFact,
+    patchFunFact,
+    deleteFunFact
 }

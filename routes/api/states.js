@@ -13,8 +13,10 @@ router.route('/:state')
 
 router.route("/:state/funfact")
     .get(statesController.getFunFact)
-    .post(statesController.postFunFact);
-    
+    .post(statesController.postFunFact)
+    .patch(statesController.patchFunFact)
+    .delete(statesController.deleteFunFact);
+
 router.route("/:state/capital")
     .get(statesController.getCapital);
 router.route("/:state/nickname")
